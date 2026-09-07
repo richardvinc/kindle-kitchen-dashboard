@@ -5,7 +5,7 @@ import { getStartEndWeekDateByDate } from "../helpers";
 const menuSchedules = schema.menuSchedules;
 
 export const findMenuByDate = async (date: string) => {
-  const schedule = db
+  const schedule = await db
     .select({
       name: menuSchedules.name,
       ingredients: menuSchedules.ingredients,
@@ -17,18 +17,16 @@ export const findMenuByDate = async (date: string) => {
   if (!schedule) {
     return {
       name: "OFF",
-      ingredients: "",
+      ingredients: [],
     };
   }
 
   return {
     name: schedule.name,
-    ingredients: schedule.ingredients
-      .map(
-        ({ ingredientName, amount, remark }) =>
-          `${ingredientName}: ${amount}${remark ? ` (${remark})` : ""}`,
-      )
-      .join("\n"),
+    ingredients: schedule.ingredients.map(
+      ({ ingredientName, amount, remark }) =>
+        `${ingredientName}: ${amount}${remark ? ` (${remark})` : ""}`,
+    ),
   };
 };
 
