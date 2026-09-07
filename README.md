@@ -9,7 +9,18 @@ bun install
 To run:
 
 ```bash
-bun run 
+bun run
 ```
 
-This project was created using `bun init` in bun v1.4.2. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+## Pi-Related
+
+After updating the app, we need to manually pull, install, and restart the service on Pi using
+
+```
+cd /opt/kindle-kitchen-dashboard
+
+git pull
+bun install
+
+sudo systemctl restart kindle-kitchen-dashboard.service
+```
