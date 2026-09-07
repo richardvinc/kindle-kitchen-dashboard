@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.get("/", (_req: Request, res: Response) => {
   res.json({ status: "healthy" });
 });
-app.use("api/menuSchedules", menuScheduleRouter);
+app.use("/api/menuSchedules", menuScheduleRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
