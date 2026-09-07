@@ -11,6 +11,11 @@ router.get("/today", async (_req: Request, res: Response) => {
   res.json(await findMenuByDate(today));
 });
 
+router.get("/tomorrow", async (_req: Request, res: Response) => {
+  const tomorrow = getDateGMT7(1);
+  res.json(await findMenuByDate(tomorrow));
+});
+
 router.get("/week", async (_req: Request, res: Response) => {
   const today = getDateGMT7();
   res.json(await findThisWeekMenus(today));
