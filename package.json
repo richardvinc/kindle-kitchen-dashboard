@@ -1,6 +1,9 @@
 {
   "name": "kitchen-dashboard",
   "private": true,
+  "scripts": {
+    "start": "bun app.ts"
+  },
   "devDependencies": {
     "@types/body-parser": "^1.19.6",
     "@types/bun": "latest",

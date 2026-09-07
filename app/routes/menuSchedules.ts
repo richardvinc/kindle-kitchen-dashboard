@@ -8,12 +8,10 @@ export const router = Router();
 
 router.get("/today", async (_req: Request, res: Response) => {
   const today = getDateGMT7();
-  console.log(today);
   res.json(await findMenuByDate(today));
 });
 
 router.get("/week", async (_req: Request, res: Response) => {
   const today = getDateGMT7();
-  console.log(today);
   res.json(await findThisWeekMenus(today));
 });
