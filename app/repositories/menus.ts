@@ -11,7 +11,8 @@ export const findMenusByKeyword = async (keyword: string) => {
 	return db
 		.select()
 		.from(menus)
-		.where(like(menus.name, `%${keyword}%`));
+		.where(like(menus.name, `%${keyword}%`))
+		.limit(5);
 };
 
 export const addMenus = async (menu: {

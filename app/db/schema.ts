@@ -20,13 +20,11 @@ export const menuSchedules = sqliteTable("menu_schedules", {
 	id: integer("id").primaryKey(),
 	name: text("name").notNull(),
 	date: text("date").notNull().unique(),
-	ingredients: text("ingredients", { mode: "json" })
-		.$type<
-			{
-				ingredientName: string;
-				amount: string;
-				remark?: string;
-			}[]
-		>()
-		.notNull(),
+	ingredients: text("ingredients", { mode: "json" }).$type<
+		{
+			ingredientName: string;
+			amount: string;
+			remark?: string;
+		}[]
+	>(),
 });

@@ -45,8 +45,11 @@ GET http://localhost:8888/api/menuSchedules/today
 ### get tomorrow's menu
 GET http://localhost:8888/api/menuSchedules/tomorrow
 
-### get weekly menu
+### get this week menu
 GET http://localhost:8888/api/menuSchedules/week
+
+### get next week menu
+GET http://localhost:8888/api/menuSchedules/next-week
 
 ### add new menu schedule
 @menuDate = "2026-09-09"

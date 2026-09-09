@@ -11,7 +11,8 @@ export const findIngredientsByKeyword = async (keyword: string) => {
 	return db
 		.select()
 		.from(ingredients)
-		.where(like(ingredients.name, `%${keyword}%`));
+		.where(like(ingredients.name, `%${keyword}%`))
+		.limit(5);
 };
 
 export const addIngredient = async (ingredient: { name: string }) => {

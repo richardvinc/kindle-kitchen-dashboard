@@ -2,6 +2,7 @@ import { type Request, type Response, Router } from "express";
 import { getDateGMT7 } from "../helpers";
 import {
 	addMenuToDate,
+	findNextWeekMenus,
 	findThisWeekMenus,
 	getDetailedMenuByDate,
 } from "../repositories/menuSchedules";
@@ -20,6 +21,11 @@ router.get("/tomorrow", async (_req: Request, res: Response) => {
 router.get("/week", async (_req: Request, res: Response) => {
 	const today = getDateGMT7();
 	return res.json(await findThisWeekMenus(today));
+});
+
+router.get("/next-week", async (_req: Request, res: Response) => {
+	const today = getDateGMT7();
+	return res.json(await findNextWeekMenus(today));
 });
 
 router.post("/", async (req: Request, res: Response) => {
