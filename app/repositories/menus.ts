@@ -2,6 +2,7 @@ import { eq, like } from "drizzle-orm";
 import { db, schema } from "../db";
 
 const menus = schema.menus;
+const ingredients = schema.ingredients;
 
 export const getAll = async () => {
 	return db.select().from(menus);
@@ -22,17 +23,28 @@ export const addMenus = async (menu: {
 		amount: string;
 	}[];
 }) => {
-	return await db
-		.insert(menus)
-		.values({
-			name: menu.name,
-			recipe: menu.recipe.map(({ name, amount }) => ({
-				ingredientName: name.toLowerCase(),
-				amount: amount.toLowerCase(),
-			})),
-		})
-		.onConflictDoNothing()
-		.returning();
+	const recipe = menu.recipe.map(({ name, amount }) => ({
+		ingredientName: name.trim().toLowerCase(),
+		amount: amount.trim().toLowerCase(),
+	}));
+
+	return db.transaction((tx) => {
+		const result = tx
+			.insert(menus)
+			.values({ name: menu.name, recipe })
+			.onConflictDoNothing()
+			.returning()
+			.all();
+
+		if (recipe.length) {
+			tx.insert(ingredients)
+				.values(recipe.map(({ ingredientName }) => ({ name: ingredientName })))
+				.onConflictDoNothing()
+				.run();
+		}
+
+		return result;
+	});
 };
 
 export const updateMenu = async (

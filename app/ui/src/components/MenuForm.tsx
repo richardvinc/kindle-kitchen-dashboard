@@ -12,9 +12,10 @@ import { SuggestionList } from "./SuggestionList";
 type MenuFormProps = {
 	day: MenuDay;
 	onSaved: () => void;
+	onCancel: () => void;
 };
 
-export function MenuForm({ day, onSaved }: MenuFormProps) {
+export function MenuForm({ day, onSaved, onCancel }: MenuFormProps) {
 	const [name, setName] = useState(day.name ?? "");
 	const [ingredients, setIngredients] = useState<Ingredient[]>(
 		day.ingredients.length
@@ -300,6 +301,14 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 			</label>
 			<div className="form-actions">
 				<span className="save-message">{message}</span>
+				<button
+					type="button"
+					className="delete-button"
+					disabled={saving}
+					onClick={onCancel}
+				>
+					Cancel
+				</button>
 				{day.name && (
 					<button
 						type="button"

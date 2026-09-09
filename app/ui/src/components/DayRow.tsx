@@ -23,7 +23,7 @@ export function DayRow({ day, editing, onEdit, onSaved }: DayRowProps) {
 					{editing ? "Close" : "Edit"}
 				</button>
 			</div>
-			{editing && <MenuForm day={day} onSaved={onSaved} />}
+			{editing && <MenuForm day={day} onSaved={onSaved} onCancel={onEdit} />}
 		</article>
 	);
 }

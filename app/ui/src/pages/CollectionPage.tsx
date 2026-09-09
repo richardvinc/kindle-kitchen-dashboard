@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { API_BASE } from "../api";
 import { Navigation } from "../components/Navigation";
 import { PageHeader } from "../components/PageHeader";
+import { SuggestionList } from "../components/SuggestionList";
 import {
 	type CollectionItem,
 	type CollectionMenu,
@@ -25,6 +26,37 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 	const [loading, setLoading] = useState(true);
 	const [saving, setSaving] = useState(false);
 	const [message, setMessage] = useState("");
+	const [ingredientSuggestions, setIngredientSuggestions] = useState<
+		Record<number, string[]>
+	>({});
+	const searchTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>(
+		{},
+	);
+
+	const findIngredients = (value: string, index: number) => {
+		const existingTimer = searchTimers.current[index];
+		if (existingTimer) clearTimeout(existingTimer);
+
+		if (value.trim().length < 2) {
+			setIngredientSuggestions((current) => ({ ...current, [index]: [] }));
+			return;
+		}
+
+		searchTimers.current[index] = setTimeout(() => {
+			void (async () => {
+				const response = await fetch(
+					`${API_BASE}/ingredients/find?keyword=${encodeURIComponent(value)}`,
+				);
+				if (!response.ok) return;
+				const matches = (await response.json()) as { name: string }[];
+				setIngredientSuggestions((current) => ({
+					...current,
+					[index]: matches.map((match) => match.name),
+				}));
+			})();
+			delete searchTimers.current[index];
+		}, 300);
+	};
 
 	const loadItems = useCallback(async () => {
 		setLoading(true);
@@ -79,6 +111,7 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 			setMessage("Saved");
 			void loadItems();
 		} catch (saveError) {
+			setIngredientSuggestions({});
 			setMessage(
 				saveError instanceof Error ? saveError.message : "Could not save",
 			);
@@ -129,6 +162,13 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 		}
 	};
 
+	const cancel = () => {
+		setName("");
+		setRecipe([emptyIngredient()]);
+		setEditingId(null);
+		setMessage("");
+	};
+
 	return (
 		<div className="shell">
 			<Navigation page={type} onNavigate={onNavigate} />
@@ -156,19 +196,47 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 							<div className="section-label">Recipe</div>
 							{recipe.map((item, index) => (
 								<div className="collection-recipe-row" key={item.id}>
-									<input
-										value={item.name}
-										onChange={(event) =>
-											setRecipe((current) =>
-												current.map((entry, entryIndex) =>
-													entryIndex === index
-														? { ...entry, name: event.target.value }
-														: entry,
-												),
-											)
-										}
-										placeholder="Ingredient"
-									/>
+									<div className="ingredient-input">
+										<input
+											value={item.name}
+											onBlur={() =>
+												setIngredientSuggestions((current) => ({
+													...current,
+													[index]: [],
+												}))
+											}
+											onChange={(event) => {
+												const value = event.target.value;
+												setRecipe((current) =>
+													current.map((entry, entryIndex) =>
+														entryIndex === index
+															? { ...entry, name: value }
+															: entry,
+													),
+												);
+												findIngredients(value, index);
+											}}
+											placeholder="Ingredient"
+										/>
+										{ingredientSuggestions[index]?.length > 0 && (
+											<SuggestionList
+												values={ingredientSuggestions[index]}
+												onSelect={(value) => {
+													setRecipe((current) =>
+														current.map((entry, entryIndex) =>
+															entryIndex === index
+																? { ...entry, name: value }
+																: entry,
+														),
+													);
+													setIngredientSuggestions((current) => ({
+														...current,
+														[index]: [],
+													}));
+												}}
+											/>
+										)}
+									</div>
 									<input
 										value={item.amount}
 										onChange={(event) =>
@@ -208,6 +276,9 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 					)}
 					<div className="form-actions">
 						<span className="save-message">{message}</span>
+						<button type="button" className="delete-button" onClick={cancel}>
+							Cancel
+						</button>
 						<button type="submit" className="save-button" disabled={saving}>
 							{saving ? "Saving..." : editingId === null ? "Add" : "Update"}
 						</button>
