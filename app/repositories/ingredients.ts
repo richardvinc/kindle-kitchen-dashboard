@@ -1,4 +1,4 @@
-import { like } from "drizzle-orm";
+import { eq, like } from "drizzle-orm";
 import { db, schema } from "../db";
 
 const ingredients = schema.ingredients;
@@ -23,4 +23,8 @@ export const addIngredient = async (ingredient: { name: string }) => {
 		})
 		.onConflictDoNothing()
 		.returning();
+};
+
+export const removeIngredient = async (id: number) => {
+	return db.delete(ingredients).where(eq(ingredients.id, id));
 };

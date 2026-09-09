@@ -3,6 +3,7 @@ import {
 	addMenus,
 	findMenusByKeyword,
 	getAll,
+	removeMenu,
 	updateMenu,
 } from "../repositories/menus";
 
@@ -31,4 +32,12 @@ router.put("/:id", async (req: Request, res: Response) => {
 		return res.status(400).json({ error: "Invalid menu id" });
 
 	return res.json(await updateMenu(id, req.body));
+});
+
+router.delete("/:id", async (req: Request, res: Response) => {
+	const id = Number(req.params.id);
+	if (!Number.isInteger(id))
+		return res.status(400).json({ error: "Invalid menu id" });
+
+	return res.json(await removeMenu(id));
 });

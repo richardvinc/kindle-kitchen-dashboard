@@ -57,3 +57,7 @@ export const updateMenu = async (
 		.where(eq(menus.id, id))
 		.returning();
 };
+
+export const removeMenu = async (id: number) => {
+	return db.delete(menus).where(eq(menus.id, id));
+};

@@ -104,6 +104,30 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 		setMessage("");
 	};
 
+	const deleteItem = async (item: CollectionItem) => {
+		if (!window.confirm(`Delete ${item.name}?`)) return;
+
+		setMessage("");
+		try {
+			const response = await fetch(`${API_BASE}/${type}/${item.id}`, {
+				method: "DELETE",
+			});
+			if (!response.ok)
+				throw new Error(`Could not delete ${type.slice(0, -1)}`);
+			if (editingId === item.id) {
+				setEditingId(null);
+				setName("");
+				setRecipe([emptyIngredient()]);
+			}
+			setMessage("Deleted");
+			void loadItems();
+		} catch (deleteError) {
+			setMessage(
+				deleteError instanceof Error ? deleteError.message : "Could not delete",
+			);
+		}
+	};
+
 	return (
 		<div className="shell">
 			<Navigation page={type} onNavigate={onNavigate} />
@@ -203,12 +227,25 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 								key={item.id}
 								onClick={() => selectMenu(item)}
 							>
-								<strong>{item.name}</strong>
-								{type === "menus" && (item as CollectionMenu).recipe?.length ? (
-									<span>
-										{(item as CollectionMenu).recipe?.length} ingredients
-									</span>
-								) : null}
+								<div>
+									<strong>{item.name}</strong>
+									{type === "menus" &&
+									(item as CollectionMenu).recipe?.length ? (
+										<span>
+											{(item as CollectionMenu).recipe?.length} ingredients
+										</span>
+									) : null}
+								</div>
+								<button
+									type="button"
+									className="delete-button"
+									onClick={(event) => {
+										event.stopPropagation();
+										void deleteItem(item);
+									}}
+								>
+									Delete
+								</button>
 							</article>
 						))
 					)}

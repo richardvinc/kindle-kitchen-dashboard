@@ -32,7 +32,6 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 	>({});
 	const [saving, setSaving] = useState(false);
 	const [message, setMessage] = useState("");
-	const isOff = name.trim().toUpperCase() === "OFF";
 	const searchTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>(
 		{},
 	);
@@ -101,9 +100,9 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 		setSaving(true);
 		setMessage("");
 		try {
-			const validIngredients = isOff
-				? []
-				: ingredients.filter((ingredient) => ingredient.name.trim());
+			const validIngredients = ingredients.filter((ingredient) =>
+				ingredient.name.trim(),
+			);
 			const schedule = await fetch(`${API_BASE}/menuSchedules`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -143,6 +142,28 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 		} catch (saveError) {
 			setMessage(
 				saveError instanceof Error ? saveError.message : "Could not save",
+			);
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	const deleteSchedule = async () => {
+		if (!window.confirm(`Delete the menu planned for ${day.date}?`)) return;
+
+		setSaving(true);
+		setMessage("");
+		try {
+			const response = await fetch(`${API_BASE}/menuSchedules/${day.date}`, {
+				method: "DELETE",
+			});
+			if (!response.ok) throw new Error("Could not delete the schedule");
+			onSaved();
+		} catch (deleteError) {
+			setMessage(
+				deleteError instanceof Error
+					? deleteError.message
+					: "Could not delete the schedule",
 			);
 		} finally {
 			setSaving(false);
@@ -198,16 +219,13 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 					}}
 				/>
 			)}
-			<div className={isOff ? "ingredients disabled" : "ingredients"}>
-				<div className="section-label">
-					Ingredients {isOff && <span>OFF has no ingredients</span>}
-				</div>
+			<div className="ingredients">
+				<div className="section-label">Ingredients</div>
 				{ingredients.map((ingredient, index) => (
 					<div className="ingredient-row" key={ingredient.id}>
 						<div className="ingredient-input">
 							<input
 								value={ingredient.name}
-								disabled={isOff}
 								onBlur={() =>
 									setIngredientSuggestions((current) => ({
 										...current,
@@ -235,7 +253,6 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 						</div>
 						<input
 							value={ingredient.amount}
-							disabled={isOff}
 							onChange={(event) =>
 								updateIngredient(index, "amount", event.target.value)
 							}
@@ -243,7 +260,6 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 						/>
 						<input
 							value={ingredient.remark}
-							disabled={isOff}
 							onChange={(event) =>
 								updateIngredient(index, "remark", event.target.value)
 							}
@@ -252,7 +268,6 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 						<button
 							type="button"
 							className="remove-ingredient"
-							disabled={isOff}
 							aria-label={`Remove ${ingredient.name || "ingredient"}`}
 							onClick={() =>
 								setIngredients((current) =>
@@ -267,7 +282,6 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 				<button
 					type="button"
 					className="add-ingredient"
-					disabled={isOff}
 					onClick={() =>
 						setIngredients((current) => [...current, emptyIngredient()])
 					}
@@ -285,6 +299,16 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 			</label>
 			<div className="form-actions">
 				<span className="save-message">{message}</span>
+				{day.name && (
+					<button
+						type="button"
+						className="delete-button"
+						disabled={saving}
+						onClick={() => void deleteSchedule()}
+					>
+						Delete schedule
+					</button>
+				)}
 				<button type="submit" className="save-button" disabled={saving}>
 					{saving ? "Saving..." : day.name ? "Update menu" : "Insert menu"}
 				</button>

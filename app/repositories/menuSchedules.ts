@@ -16,7 +16,7 @@ export const getDetailedMenuByDate = async (date: string) => {
 
 	if (!schedule) {
 		return {
-			name: "OFF",
+			name: null,
 			ingredients: [],
 		};
 	}
@@ -142,4 +142,8 @@ export const addMenuToDate = async (menu: {
 			},
 		})
 		.returning();
+};
+
+export const removeSchedule = async (date: string) => {
+	return db.delete(menuSchedules).where(eq(menuSchedules.date, date));
 };

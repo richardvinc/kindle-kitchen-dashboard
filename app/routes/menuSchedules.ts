@@ -5,6 +5,7 @@ import {
 	findNextWeekMenus,
 	findThisWeekMenus,
 	getDetailedMenuByDate,
+	removeSchedule,
 } from "../repositories/menuSchedules";
 export const router = Router();
 
@@ -32,4 +33,12 @@ router.post("/", async (req: Request, res: Response) => {
 	const obj = req.body;
 
 	return res.json(await addMenuToDate(obj));
+});
+
+router.delete("/:date", async (req: Request, res: Response) => {
+	const date = req.params.date;
+	if (typeof date !== "string")
+		return res.status(400).json({ error: "Invalid schedule date" });
+
+	return res.json(await removeSchedule(date));
 });

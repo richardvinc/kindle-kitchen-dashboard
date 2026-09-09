@@ -3,6 +3,7 @@ import {
 	addIngredient,
 	findIngredientsByKeyword,
 	getAll,
+	removeIngredient,
 } from "../repositories/ingredients";
 
 export const router = Router();
@@ -22,4 +23,12 @@ router.post("/", async (req: Request, res: Response) => {
 	const obj = req.body;
 
 	return res.json(await addIngredient(obj));
+});
+
+router.delete("/:id", async (req: Request, res: Response) => {
+	const id = Number(req.params.id);
+	if (!Number.isInteger(id))
+		return res.status(400).json({ error: "Invalid ingredient id" });
+
+	return res.json(await removeIngredient(id));
 });
