@@ -19,8 +19,11 @@ After updating the app, we need to manually pull, install, and restart the servi
 ```
 cd /opt/kindle-kitchen-dashboard
 
-git pull
-bun install
+git pull --ff-only
+bun install --frozen-lockfile
+bun run build
 
 sudo systemctl restart kindle-kitchen-dashboard.service
 ```
+
+The service listens on port `8888` by default and serves both the dashboard and API. The SQLite database is stored in `app/db/data/sqlite.db`; migrations run automatically when the service starts. For LAN access, the systemd service should run as a user with write access to the repository so SQLite can update that file.

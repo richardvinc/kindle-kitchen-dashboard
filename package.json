@@ -3,6 +3,7 @@
 	"private": true,
 	"scripts": {
 		"start": "bun app.ts",
+		"build": "bun --cwd app/ui build",
 		"dev": "bun --watch app.ts",
 		"dev:ui": "bun --cwd app/ui dev",
 		"dev:all": "concurrently -k -n API,UI -c blue,green \"bun run dev\" \"bun run dev:ui\""
