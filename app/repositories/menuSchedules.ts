@@ -61,7 +61,7 @@ export const findThisWeekMenus = async (todayDate: string) => {
 		const schedule = schedules.find((schedule) => schedule.date === dateString);
 
 		return {
-			text: `${dayNames[index]}: ${schedule?.name ?? null}`,
+			text: `${dayNames[index]}: ${schedule?.name ?? "-"}`,
 			day: dayNames[index],
 			date: dateString,
 			name: schedule?.name ?? null,
@@ -105,7 +105,7 @@ export const findNextWeekMenus = async (todayDate: string) => {
 		const schedule = schedules.find((schedule) => schedule.date === dateString);
 
 		return {
-			text: `${dayNames[index]}: ${schedule?.name ?? null}`,
+			text: `${dayNames[index]}: ${schedule?.name ?? "-"}`,
 			day: dayNames[index],
 			date: dateString,
 			name: schedule?.name ?? null,
