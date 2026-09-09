@@ -1,4 +1,4 @@
-import { like } from "drizzle-orm";
+import { eq, like } from "drizzle-orm";
 import { db, schema } from "../db";
 
 const menus = schema.menus;
@@ -32,5 +32,28 @@ export const addMenus = async (menu: {
 			})),
 		})
 		.onConflictDoNothing()
+		.returning();
+};
+
+export const updateMenu = async (
+	id: number,
+	menu: {
+		name: string;
+		recipe: {
+			name: string;
+			amount: string;
+		}[];
+	},
+) => {
+	return db
+		.update(menus)
+		.set({
+			name: menu.name,
+			recipe: menu.recipe.map(({ name, amount }) => ({
+				ingredientName: name,
+				amount,
+			})),
+		})
+		.where(eq(menus.id, id))
 		.returning();
 };

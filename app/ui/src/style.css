@@ -37,6 +37,25 @@ button {
 	margin: 0 auto;
 	padding: 58px 28px 30px;
 }
+.navigation {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 44px;
+}
+.nav-button {
+	border: 0;
+	border-bottom: 2px solid transparent;
+	background: transparent;
+	color: var(--muted);
+	padding: 5px 2px;
+	font-size: 13px;
+	font-weight: 600;
+}
+.nav-button:hover,
+.nav-button.active {
+	border-color: var(--coral);
+	color: var(--blue);
+}
 .header {
 	border-bottom: 1px solid var(--line);
 	padding-bottom: 38px;
@@ -67,6 +86,62 @@ h1 {
 }
 main {
 	padding-top: 30px;
+}
+.collection-layout {
+	display: grid;
+	grid-template-columns: minmax(250px, 0.8fr) minmax(0, 1.2fr);
+	gap: 24px;
+}
+.collection-form,
+.collection-list {
+	background: var(--paper);
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	padding: 20px;
+}
+.collection-form h2 {
+	font-size: 22px;
+	margin: 0 0 18px;
+}
+.collection-recipe {
+	margin-top: 22px;
+}
+.collection-recipe-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(80px, 0.6fr) auto;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+.collection-recipe-row .remove-ingredient {
+	white-space: nowrap;
+}
+.collection-list {
+	display: grid;
+	align-content: start;
+	gap: 8px;
+}
+.collection-item {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	border-bottom: 1px solid var(--line);
+	padding: 10px 2px;
+	color: var(--blue);
+}
+.collection-item.clickable {
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		background 0.2s ease;
+}
+.collection-item.clickable:hover {
+	border-color: var(--mint);
+	background: #f2fffb;
+}
+.collection-item span {
+	color: var(--muted);
+	font-size: 12px;
 }
 .tabs {
 	display: flex;
@@ -369,6 +444,9 @@ footer {
 	.header {
 		padding-bottom: 28px;
 	}
+	.navigation {
+		margin-bottom: 32px;
+	}
 	main {
 		padding-top: 22px;
 	}
@@ -398,6 +476,22 @@ footer {
 	}
 	h2 {
 		font-size: 24px;
+	}
+	.collection-layout {
+		grid-template-columns: 1fr;
+	}
+	.collection-form,
+	.collection-list {
+		padding: 16px;
+	}
+	.collection-recipe-row {
+		grid-template-columns: 1fr auto;
+	}
+	.collection-recipe-row input {
+		grid-column: 1 / -1;
+	}
+	.collection-recipe-row .remove-ingredient {
+		grid-column: 2;
 	}
 	.ingredient-row {
 		grid-template-columns: 1fr auto;

@@ -1,5 +1,10 @@
 import { type Request, type Response, Router } from "express";
-import { addMenus, findMenusByKeyword, getAll } from "../repositories/menus";
+import {
+	addMenus,
+	findMenusByKeyword,
+	getAll,
+	updateMenu,
+} from "../repositories/menus";
 
 export const router = Router();
 
@@ -18,4 +23,12 @@ router.post("/", async (req: Request, res: Response) => {
 	const obj = req.body;
 
 	return res.json(await addMenus(obj));
+});
+
+router.put("/:id", async (req: Request, res: Response) => {
+	const id = Number(req.params.id);
+	if (!Number.isInteger(id))
+		return res.status(400).json({ error: "Invalid menu id" });
+
+	return res.json(await updateMenu(id, req.body));
 });
