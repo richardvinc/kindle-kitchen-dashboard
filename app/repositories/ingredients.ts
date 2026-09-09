@@ -11,7 +11,7 @@ export const findIngredientsByKeyword = async (keyword: string) => {
 	return db
 		.select()
 		.from(ingredients)
-		.where(like(ingredients.name, `%${keyword}%`))
+		.where(like(ingredients.name, `%${keyword.toLowerCase()}%`))
 		.limit(5);
 };
 
@@ -19,7 +19,7 @@ export const addIngredient = async (ingredient: { name: string }) => {
 	return db
 		.insert(ingredients)
 		.values({
-			name: ingredient.name,
+			name: ingredient.name.toLowerCase(),
 		})
 		.onConflictDoNothing()
 		.returning();

@@ -122,12 +122,12 @@ export const addMenuToDate = async (menu: {
 	await db
 		.insert(menuSchedules)
 		.values({
-			name: menu.name,
+			name: menu.name.toLowerCase(),
 			date: menu.date,
 			ingredients: menu.ingredients.map(({ name, amount, remark }) => ({
-				ingredientName: name,
-				amount,
-				remark,
+				ingredientName: name.toLowerCase(),
+				amount: amount.toLowerCase(),
+				remark: remark?.toLowerCase(),
 			})),
 		})
 		.onConflictDoUpdate({
@@ -135,9 +135,9 @@ export const addMenuToDate = async (menu: {
 			set: {
 				name: menu.name,
 				ingredients: menu.ingredients.map(({ name, amount, remark }) => ({
-					ingredientName: name,
-					amount,
-					remark,
+					ingredientName: name.toLowerCase(),
+					amount: amount.toLowerCase(),
+					remark: remark?.toLowerCase(),
 				})),
 			},
 		})

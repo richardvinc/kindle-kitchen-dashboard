@@ -11,7 +11,7 @@ export const findMenusByKeyword = async (keyword: string) => {
 	return db
 		.select()
 		.from(menus)
-		.where(like(menus.name, `%${keyword}%`))
+		.where(like(menus.name, `%${keyword.toLowerCase()}%`))
 		.limit(5);
 };
 
@@ -27,8 +27,8 @@ export const addMenus = async (menu: {
 		.values({
 			name: menu.name,
 			recipe: menu.recipe.map(({ name, amount }) => ({
-				ingredientName: name,
-				amount,
+				ingredientName: name.toLowerCase(),
+				amount: amount.toLowerCase(),
 			})),
 		})
 		.onConflictDoNothing()
@@ -50,8 +50,8 @@ export const updateMenu = async (
 		.set({
 			name: menu.name,
 			recipe: menu.recipe.map(({ name, amount }) => ({
-				ingredientName: name,
-				amount,
+				ingredientName: name.toLowerCase(),
+				amount: amount.toLowerCase(),
 			})),
 		})
 		.where(eq(menus.id, id))
