@@ -1,0 +1,66 @@
+### MENUS
+### get all menus
+GET http://localhost:8888/api/menus 
+
+
+### find menu by keyword
+@menuKeyword = tumis
+GET http://localhost:8888/api/menus/find?keyword={{menuKeyword}} 
+
+### add new menu
+POST http://localhost:8888/api/menus 
+content-type: application/json
+
+{
+  "name": "lalala",
+	"recipe": [
+    {
+      "name": "lululu",
+      "amount": "lololo"
+    }
+  ]
+}
+
+### INGREDIENTS
+### get all ingredients
+GET http://localhost:8888/api/ingredients
+
+
+### find ingredients by keyword
+@menuKeyword = sawi
+GET http://localhost:8888/api/ingredients/find?keyword={{menuKeyword}}
+
+### add new ingredient
+POST http://localhost:8888/api/ingredients 
+content-type: application/json
+
+{
+  "name": "lalala"
+}
+
+### MENU SCHEDULES
+### get today's menu
+GET http://localhost:8888/api/menuSchedules/today
+
+### get tomorrow's menu
+GET http://localhost:8888/api/menuSchedules/tomorrow
+
+### get weekly menu
+GET http://localhost:8888/api/menuSchedules/week
+
+### add new menu schedule
+@menuDate = "2026-09-09"
+POST http://localhost:8888/api/menuSchedules
+content-type: application/json
+
+{
+  "date": {{menuDate}},
+  "name": "lalala",
+  "ingredients": [
+    {
+      "name": "lululu",
+      "amount": "100 gram",
+      "remark": "lele"
+    }
+  ]
+}

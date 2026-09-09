@@ -1,22 +1,29 @@
 import { type Request, type Response, Router } from "express";
 import { getDateGMT7 } from "../helpers";
 import {
-  findMenuByDate,
-  findThisWeekMenus,
+	addMenuToDate,
+	findThisWeekMenus,
+	getDetailedMenuByDate,
 } from "../repositories/menuSchedules";
 export const router = Router();
 
 router.get("/today", async (_req: Request, res: Response) => {
-  const today = getDateGMT7();
-  res.json(await findMenuByDate(today));
+	const today = getDateGMT7();
+	return res.json(await getDetailedMenuByDate(today));
 });
 
 router.get("/tomorrow", async (_req: Request, res: Response) => {
-  const tomorrow = getDateGMT7(1);
-  res.json(await findMenuByDate(tomorrow));
+	const tomorrow = getDateGMT7(1);
+	return res.json(await getDetailedMenuByDate(tomorrow));
 });
 
 router.get("/week", async (_req: Request, res: Response) => {
-  const today = getDateGMT7();
-  res.json(await findThisWeekMenus(today));
+	const today = getDateGMT7();
+	return res.json(await findThisWeekMenus(today));
+});
+
+router.post("/", async (req: Request, res: Response) => {
+	const obj = req.body;
+
+	return res.json(await addMenuToDate(obj));
 });
