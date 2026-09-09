@@ -327,6 +327,7 @@ function CollectionPage({
 						<div className="loading">Loading...</div>
 					) : (
 						items.map((item) => (
+							// biome-ignore lint/a11y/useKeyWithClickEvents: menu rows are clickable by design
 							<article
 								className={
 									type === "menus"
