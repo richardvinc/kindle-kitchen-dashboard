@@ -6,6 +6,7 @@ import {
 	type CollectionItem,
 	type CollectionMenu,
 	type CollectionType,
+	createClientId,
 	emptyIngredient,
 	type Ingredient,
 	type Page,
@@ -94,7 +95,7 @@ export function CollectionPage({ type, onNavigate }: CollectionPageProps) {
 		setRecipe(
 			menu.recipe?.length
 				? menu.recipe.map((ingredient) => ({
-						id: crypto.randomUUID(),
+						id: createClientId(),
 						name: ingredient.ingredientName,
 						amount: ingredient.amount,
 						remark: "",

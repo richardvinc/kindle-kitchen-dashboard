@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { API_BASE } from "../api";
 import {
+	createClientId,
 	emptyIngredient,
 	type Ingredient,
 	type MenuDay,
@@ -18,7 +19,7 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 	const [ingredients, setIngredients] = useState<Ingredient[]>(
 		day.ingredients.length
 			? day.ingredients.map((item) => ({
-					id: crypto.randomUUID(),
+					id: createClientId(),
 					name: item.ingredientName,
 					amount: item.amount,
 					remark: item.remark ?? "",
@@ -209,7 +210,7 @@ export function MenuForm({ day, onSaved }: MenuFormProps) {
 						if (selected?.recipe?.length)
 							setIngredients(
 								selected.recipe.map((ingredient) => ({
-									id: crypto.randomUUID(),
+									id: createClientId(),
 									name: ingredient.ingredientName,
 									amount: ingredient.amount,
 									remark: "",

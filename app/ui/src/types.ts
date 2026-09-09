@@ -33,8 +33,13 @@ export type CollectionMenu = {
 export type CollectionIngredient = { id: number; name: string };
 export type CollectionItem = CollectionMenu | CollectionIngredient;
 
+// random ID for UI-only purposes
+export const createClientId = (): string => {
+	return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+};
+
 export const emptyIngredient = (): Ingredient => ({
-	id: crypto.randomUUID(),
+	id: createClientId(),
 	name: "",
 	amount: "",
 	remark: "",
