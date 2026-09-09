@@ -95,6 +95,9 @@ export function MenuCollectionForm({ menu, onSaved }: MenuCollectionFormProps) {
 				},
 			);
 			if (!response.ok) throw new Error("Could not save menu");
+			setName("");
+			setRecipe([emptyIngredient()]);
+			setIngredientSuggestions({});
 			setMessage("Saved");
 			onSaved();
 		} catch (saveError) {
