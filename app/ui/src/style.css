@@ -210,6 +210,7 @@ h2 {
 	letter-spacing: -0.06em;
 }
 input:not([type="checkbox"]) {
+	width: 100%;
 	min-height: 43px;
 	border: 1px solid var(--ink);
 	border-radius: 0;
@@ -291,15 +292,18 @@ input:disabled {
 }
 .ingredient-row {
 	display: grid;
-	grid-template-columns: 1.3fr 0.8fr 1fr auto;
+	width: 100%;
+	grid-template-columns: 1fr auto;
 	gap: 8px;
 	margin-bottom: 8px;
 }
 .ingredient-row > input {
 	min-width: 0;
+	grid-column: 1 / -1;
 }
 .ingredient-input {
 	position: relative;
+	grid-column: 1 / -1;
 }
 .remove-ingredient {
 	border: 0;
@@ -546,6 +550,7 @@ footer {
 		padding: 16px;
 	}
 	.collection-recipe-row {
+		width: 100%;
 		grid-template-columns: 1fr auto;
 	}
 	.collection-recipe-row input {
