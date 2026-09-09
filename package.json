@@ -3,13 +3,16 @@
 	"private": true,
 	"scripts": {
 		"start": "bun app.ts",
-		"dev": "bun --watch app.ts"
+		"dev": "bun --watch app.ts",
+		"dev:ui": "bun --cwd app/ui dev",
+		"dev:all": "concurrently -k -n API,UI -c blue,green \"bun run dev\" \"bun run dev:ui\""
 	},
 	"devDependencies": {
 		"@types/body-parser": "^1.19.6",
 		"@types/bun": "latest",
 		"@types/express": "^5.0.6",
-		"drizzle-kit": "^1.0.0-rc.4"
+		"drizzle-kit": "^1.0.0-rc.4",
+		"concurrently": "^9.2.1"
 	},
 	"peerDependencies": {
 		"typescript": "^7"

@@ -37,6 +37,7 @@ export const findThisWeekMenus = async (todayDate: string) => {
 		.select({
 			name: menuSchedules.name,
 			date: menuSchedules.date,
+			ingredients: menuSchedules.ingredients,
 		})
 		.from(menuSchedules)
 		.where(and(gte(menuSchedules.date, start), lte(menuSchedules.date, end)));
@@ -59,7 +60,13 @@ export const findThisWeekMenus = async (todayDate: string) => {
 
 		const schedule = schedules.find((schedule) => schedule.date === dateString);
 
-		return `${dayNames[index]}: ${schedule?.name ?? null}`;
+		return {
+			text: `${dayNames[index]}: ${schedule?.name ?? null}`,
+			day: dayNames[index],
+			date: dateString,
+			name: schedule?.name ?? null,
+			ingredients: schedule?.ingredients ?? [],
+		};
 	});
 };
 
@@ -73,6 +80,7 @@ export const findNextWeekMenus = async (todayDate: string) => {
 		.select({
 			name: menuSchedules.name,
 			date: menuSchedules.date,
+			ingredients: menuSchedules.ingredients,
 		})
 		.from(menuSchedules)
 		.where(
@@ -96,7 +104,13 @@ export const findNextWeekMenus = async (todayDate: string) => {
 		const dateString = addDays(nextWeekStart, index);
 		const schedule = schedules.find((schedule) => schedule.date === dateString);
 
-		return `${dayNames[index]}: ${schedule?.name ?? null}`;
+		return {
+			text: `${dayNames[index]}: ${schedule?.name ?? null}`,
+			day: dayNames[index],
+			date: dateString,
+			name: schedule?.name ?? null,
+			ingredients: schedule?.ingredients ?? [],
+		};
 	});
 };
 
